@@ -29,7 +29,7 @@ end
 # unset irrelevant variables
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/Users/dsrinath/Desktop/Rahul's Project/implementation/IDS-for-Authentication-Services/Simulation/IDSSimulation/venv"
+set -gx VIRTUAL_ENV "/Users/dsrinath/Desktop/ids/IDS-for-Authentication-Services/Simulation/IDSSimulation/venv"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH
