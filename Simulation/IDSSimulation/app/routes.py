@@ -25,26 +25,29 @@ def attack():
             data = redis_client.get(ip)
             ip_stats = json.loads(data)
             td = datetime.now() - datetime.strptime(ip_stats['last_time'], '%Y-%m-%d %H:%M:%S.%f')
-            if (int(round(td.total_seconds() / 60)) >= 1):
-                print("des1")
+            if (int(td.total_seconds()) >= 1):
                 ip_stats['last_time'] = datetime.now()
                 ip_stats['count'] = 0
-            if(ip_stats['count'] < 5):
-                print("des2")
+            if(ip_stats['count'] <= 5):
                 ip_stats['count'] = ip_stats['count'] + 1
-            if(ip_stats['count'] >= 5 and int(round(td.total_seconds() / 60)) < 1):
-                print("des3")
+            if(ip_stats['count'] > 5 and int(td.total_seconds()) < 1):
                 return jsonify({"Authentication": "Blocked"}), 201
             rval = json.dumps(ip_stats, default=myconverter)
             redis_client.set(ip, rval)
         else:
-            print("des0")
             ip_stats = {}
             ip_stats['count'] = 1
             ip_stats['last_time'] = datetime.now()
             rval = json.dumps(ip_stats, default = myconverter)
             redis_client.set(ip, rval)
-            print(redis_client.exists(ip))
+        with sql.connect("database.db") as con:
+            cur = con.cursor()
+            user = request.json['user']
+            password = request.json['password']
+            cur.execute("SELECT rowid from USER where name = ? and password = ?", (user, password))
+            data = cur.fetchone()
+            if data is not None:
+                return jsonify({"Authentication": True}), 200
     except Exception as e:
         print(e)
     return jsonify({"Authentication": False}), 200
