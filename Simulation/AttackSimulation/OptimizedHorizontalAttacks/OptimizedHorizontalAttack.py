@@ -4,6 +4,7 @@ import json
 import time
 
 start_time = time.time()
+local_database = '../../Resources/user.csv'
 
 payload = {'user':'', 'password': '', 'metadata' : ''}
 metadata = {'IP': '', 'Cookie': 0, 'Redirect' : 0, 'UserAgent' : ''}
@@ -11,7 +12,7 @@ userAgent = {'OS': 'MacOSX','Browser': 'Chrm'}
 metadata['UserAgent'] = userAgent
 payload['metadata'] = metadata
 
-csvfile = open('../user.csv')
+csvfile = open(local_database)
 readCSV = csv.reader(csvfile, delimiter=',')
 
 url = "http://127.0.0.1:5000/attack"

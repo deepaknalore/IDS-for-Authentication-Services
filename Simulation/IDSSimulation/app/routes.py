@@ -76,3 +76,12 @@ def authenticate():
         con.close()
         return jsonify({"Authentication": True, "Check-email": check_email(request.json['user']), "Check-password": check_password(request.json['password'])}), 201
 
+
+@app.route('/test', methods = ['GET'])
+def test():
+    with sql.connect("database.db") as con:
+        cur = con.cursor()
+        cur.execute("SELECT count(*) from USER")
+        data = cur.fetchone()
+        return jsonify({"DatabaseSize": data}), 200
+

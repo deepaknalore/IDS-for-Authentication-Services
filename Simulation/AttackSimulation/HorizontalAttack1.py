@@ -8,7 +8,9 @@ userAgent = {'OS': 'MacOSX','Browser': 'Chrm'}
 metadata['UserAgent'] = userAgent
 payload['metadata'] = metadata
 
-csvfile = open('user.csv')
+local_database = "../Resources/user.csv"
+
+csvfile = open(local_database)
 readCSV = csv.reader(csvfile, delimiter=',')
 
 url = "http://127.0.0.1:5000/attack"

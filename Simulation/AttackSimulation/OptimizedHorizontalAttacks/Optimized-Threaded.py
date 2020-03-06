@@ -8,6 +8,8 @@ from copy import deepcopy
 
 start_time = time.time()
 
+local_database = '../../Resources/user.csv'
+
 # Threading related information
 q = queue.Queue()
 n_thread = 10
@@ -18,7 +20,7 @@ userAgent = {'OS': 'MacOSX','Browser': 'Chrm'}
 metadata['UserAgent'] = userAgent
 payload['metadata'] = metadata
 
-csvfile = open('../user.csv')
+csvfile = open(local_database)
 readCSV = csv.reader(csvfile, delimiter=',')
 
 url = "http://127.0.0.1:5000/attack"
