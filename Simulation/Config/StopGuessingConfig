@@ -2,6 +2,7 @@ namespace Simulator
 {
     public class ExperimentalConfiguration
     {
+        //Initialize values for days and numbers
         private const int DaysPerYear = 365;
         private const int WeeksPerYear = 52;
         private const int MonthsPerYear = 12;
@@ -9,6 +10,7 @@ namespace Simulator
         private const ulong Million = Thousand*Thousand;
         private const ulong Billion = Thousand*Million;
 
+        //
         public class BenignUserAccountGroup
         {
             public ulong GroupSize;
@@ -17,15 +19,17 @@ namespace Simulator
 
         public BlockingAlgorithmOptions BlockingOptions = new BlockingAlgorithmOptions();
 
+        // Test the amount of time spent
         public TimeSpan TestTimeSpan = new TimeSpan(1, 0, 0, 0); // 1 day
 
+        // There are 3 attack starategy
         public enum AttackStrategy
         {
             // This is the first attack where the attcker picks up the top common passwords
             BreadthFirst,
             // Password attack based on the weights of the user - how famous is the user
             Weighted,
-            //
+            // Use the password only certain number of times - 25 for example and then stop using it
             UseUntilLikelyPopular
         };
         public AttackStrategy AttackersStrategy = AttackStrategy.BreadthFirst;
@@ -42,63 +46,70 @@ namespace Simulator
         //The total number of logins
         public ulong TotalLoginAttemptsToIssue = 10*Thousand;
 
-        //
+        // Associate the client with a cookie the user has used before - Legtimate user
         public double ChanceOfCoookieReUse = 0.90d;
-        //
+
+        // Limit on the number of cookies per user account - Legitimate user
         public int MaxCookiesPerUserAccount = 10;
 
-        //
+        // Associate the client with IP the user has used before - Legitimate user
         public double ChanceOfIpReUse = 0.85d;
-        //
+
+        // Limit on the number of IPs per user account - Legitimate user
         public int MaxIpPerUserAccount = 5;
 
-        // If there are popular passwords which needs to ve removed from the distribution -
+        // If there are popular passwords which needs to be removed from the distribution -
         public int PopularPasswordsToRemoveFromDistribution = 0;
 
-        //
+        // Make use of old password for login
         public double ChanceOfLongRepeatOfStalePassword = 0.0004; // 1 in 2,500
 
-        //
+        // Automated client which makes use of old password for logging in - do it for every 5 minutes
         public double MinutesBetweenLongRepeatOfOldPassword = 5; // an attempt every 5 minutes
-        //
+
+        // Series of attempts using old password
         public uint LengthOfLongRepeatOfOldPassword = (uint) ( (60 * 24) / 5 ); // 24 hours / an attempt every 5 minutes
 
         //Legitimate user makes benign password typo errors
         public double ChanceOfBenignPasswordTypo = 0.02d;
 
-        //
+        // Each typo is followed by another - the probability is 66%
         public double ChanceOfRepeatTypo = 2d/3d; // two thirds
 
-        //
+        // The chance of repeating the same passowrd followed by the same - 33%
         public double ChanceOfRepeatUseOfPasswordFromAnotherAccount = 1d / 3d; // one thirds
 
-        //
+        // Repeating the wrong user account shortly after doing the same
         public double ChanceOfRepeatWrongAccountName = .2d; // 20%
 
-        //
+        // The delay between making errors again - default is 7 seconds
         public double DelayBetweenRepeatBenignErrorsInSeconds = 7d;
 
-        //
+        // Making a benign user account typo resulting in actual account name
         public double ChanceOfBenignAccountNameTypoResultingInAValidUserName = 0.02d;
 
         // Using another password from a different service
         public double ChanceOfAccidentallyUsingAnotherAccountPassword = 0.02d;
 
-        //
+
+        // Attacker configs starts from here
+
+        // 50% of the logins will be from attakcer - Attacker
         public double FractionOfLoginAttemptsFromAttacker = 0.5d;
 
-        //
+        // Thousand of accounts are already controlled by attackers
         public ulong NumberOfAttackerControlledAccounts = 1*Thousand;
 
         // number of IP controled by attacker
         public uint NumberOfIpAddressesControlledByAttacker = 100;// * (uint)Thousand;
+
         // Overlap of benign and attacker IP
         public double FractionOfMaliciousIPsToOverlapWithBenign = 0.01;
 
         // for an account an attacker can try max of 25 passwords
         public ulong MaxAttackerGuessesPerPassword = 25;
 
-        //
+        // Proxy of the client IPs
         public uint ProxySizeInUniqueClientIPs = 1000;
 
         // Probability of benign users behind proxies
