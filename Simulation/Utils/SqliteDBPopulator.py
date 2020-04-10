@@ -3,7 +3,7 @@ import random
 import csv
 import json
 
-LEAKED_DATA = "../Resources/msn.csv"
+LEAKED_DATA = "../Resources/msn_pp.csv"
 DATABASE = "../Resources/database.db"
 INSERTION_QUERY = "INSERT INTO USER (name,password) VALUES(?,?)"
 NUMBER_OF_ENTRIES = 10000

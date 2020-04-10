@@ -1,0 +1,20 @@
+Stuffing:
+
+Prepare the leaked password -> L_A - L_U + (tunable)0.1 * L_U
+
+Tweaking:
+
+L_A => L_A - L_U + (tunable)0.1 * L_U -> tweaking (Remove only the username and password)
+
+Optimization -> Maybe assume -> valid usernames -> Find valid users and then tweak password
+
+Optimized: L_A =>(tunable)0.1 * L_U -> tweaking (Valid
+
+U, W1, W2, W3 -> W2 and W3 go in a round-robin fashion
+
+W1-> Actual Password for the service
+0.1*W1 -> Leak  -> Tweak them -> Compare them with W2 and W3
+
+Tweaking W1 -> Comparing W2
+Tweaking W2 -> Comparing W1
+

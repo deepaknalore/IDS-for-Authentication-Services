@@ -1,9 +1,11 @@
 import json
 import time
 import requests
+import csv
 
 tweaked_password_list = "../../Resources/tweaked_password.txt"
 local_database = "../../Resources/user.csv"
+LEAKED_DATA = "../../Resources/msn.csv"
 
 tweaked_password_dict = {}
 
@@ -24,6 +26,23 @@ with open(tweaked_password_list) as fd:
         for local_user in local_users:
             if temp[0] == local_user[1]:
                 tweaked_password_dict[local_user[0]] = temp[1:]
+
+tweaked_success = {}
+tweaked_success_count = 0
+with open(LEAKED_DATA) as csv_file:
+    line_count = 0
+    for row in csv.reader(csv_file):
+        if len(row) < 2:
+            continue
+        user = row[0]
+        if user in tweaked_password_dict:
+            temp = json.loads(row[1])
+            tweaked_list = [i[0] for i in tweaked_password_dict[user]]
+            if(len(set(json.loads(row[1])).intersection(set(tweaked_list))) > 0):
+                tweaked_success[user] = set(json.loads(row[1])).intersection(set(tweaked_list))
+                tweaked_success_count += 1
+
+print(tweaked_success)
 
 start_time = time.time()
 
