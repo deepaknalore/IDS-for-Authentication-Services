@@ -18,3 +18,7 @@ W1-> Actual Password for the service
 Tweaking W1 -> Comparing W2
 Tweaking W2 -> Comparing W1
 
+L_A => L_A + some passwords are duplicated (40%) (only 1 password per user)
+L_A => L_A - L_U + Some Usernames (10%)
+
+Round-robin - ZIP

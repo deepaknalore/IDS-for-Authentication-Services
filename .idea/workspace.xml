@@ -2,17 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="aed40c05-f57f-449a-9b7e-3a8c9befc254" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Simulation/AttackSimulation/PasswordTweaking/PasswordTweaking2.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Simulation/Utils/PreProcess/1_FilterMoreFrequentPassword.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Simulation/Utils/PreProcess/2_PopulateLegitimateUser.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Simulation/Utils/PreProcess/3_LeakLegitimateUsers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Simulation/Utils/PreProcess/4_MergeLeakedInfo.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Simulation/AttackSimulation/PasswordTweaking/RoundRobinPasswordTweaking.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Simulation/Utils/PreProcess/PreProcess.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation/AttackSimulation/PasswordTweaking/PasswordTweaking.py" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/AttackSimulation/PasswordTweaking/PasswordTweaking.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation/IDSInitializerConfig.py" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/IDSInitializerConfig.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blank" beforeDir="false" afterPath="$PROJECT_DIR$/Blank" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Simulation/Resources/all_leaked.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Simulation/Resources/leaked.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/Resources/leaked.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Simulation/Resources/msn.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Simulation/Resources/msn_pp.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Simulation/Resources/updated_msn_pp.csv" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Simulation/Resources/user.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/Resources/user.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation/Utils/SqliteDBPopulator.py" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/Utils/SqliteDBPopulator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation/Utils/UserPasswordStats.py" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/Utils/UserPasswordStats.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Simulation/Utils/PreProcess/2_PopulateLegitimateUser.py" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/Utils/PreProcess/2_PopulateLegitimateUser.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,28 +66,7 @@
       <recent name="$PROJECT_DIR$/Simulation/AttackSimulation" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.4_MergeLeakedInfo">
-    <configuration name="1_FilterMoreFrequentPassword" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="IDS-for-Authentication-Services" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Simulation/Utils/PreProcess" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Simulation/Utils/PreProcess/1_FilterMoreFrequentPassword.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Python.PreProcess">
     <configuration name="2_PopulateLegitimateUser" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="IDS-for-Authentication-Services" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -151,6 +130,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="PreProcess" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="IDS-for-Authentication-Services" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Simulation/Utils/PreProcess" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Simulation/Utils/PreProcess/PreProcess.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="UserPasswordStats" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="IDS-for-Authentication-Services" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -174,11 +174,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.PreProcess" />
+        <item itemvalue="Python.2_PopulateLegitimateUser" />
         <item itemvalue="Python.4_MergeLeakedInfo" />
         <item itemvalue="Python.3_LeakLegitimateUsers" />
         <item itemvalue="Python.UserPasswordStats" />
-        <item itemvalue="Python.2_PopulateLegitimateUser" />
-        <item itemvalue="Python.1_FilterMoreFrequentPassword" />
       </list>
     </recent_temporary>
   </component>
@@ -208,14 +208,14 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="412" y="260" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1585944726363">
+    <state x="412" y="260" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1586535373491">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="412" y="260" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1440.900@0.0.1440.900" timestamp="1585944726363" />
-    <state x="877" y="220" key="#xdebugger.evaluate" timestamp="1586507731787">
+    <state x="412" y="260" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1440.900@0.0.1440.900" timestamp="1586535373491" />
+    <state x="877" y="220" key="#xdebugger.evaluate" timestamp="1586892252190">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="877" y="220" key="#xdebugger.evaluate/0.0.1440.900@0.0.1440.900" timestamp="1586507731787" />
+    <state x="877" y="220" key="#xdebugger.evaluate/0.0.1440.900@0.0.1440.900" timestamp="1586892252190" />
     <state x="468" y="314" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1586243951562">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -224,48 +224,48 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="100" y="100" width="1240" height="700" key="DiffContextDialog/0.0.1440.900@0.0.1440.900" timestamp="1583484162287" />
-    <state width="1419" height="303" key="GridCell.Tab.0.bottom" timestamp="1586507686687">
+    <state width="1419" height="303" key="GridCell.Tab.0.bottom" timestamp="1586900619235">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="303" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1586507686687" />
+    <state width="1419" height="303" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1586900619235" />
     <state width="1419" height="245" key="GridCell.Tab.0.bottom/0.23.1440.797@0.23.1440.797" timestamp="1585971948451" />
-    <state width="1419" height="303" key="GridCell.Tab.0.center" timestamp="1586507686685">
+    <state width="1419" height="303" key="GridCell.Tab.0.center" timestamp="1586900619232">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="303" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1586507686685" />
+    <state width="1419" height="303" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1586900619232" />
     <state width="1419" height="245" key="GridCell.Tab.0.center/0.23.1440.797@0.23.1440.797" timestamp="1585971948449" />
-    <state width="1419" height="303" key="GridCell.Tab.0.left" timestamp="1586507686684">
+    <state width="1419" height="303" key="GridCell.Tab.0.left" timestamp="1586900619230">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="303" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1586507686684" />
+    <state width="1419" height="303" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1586900619230" />
     <state width="1419" height="245" key="GridCell.Tab.0.left/0.23.1440.797@0.23.1440.797" timestamp="1585971948446" />
-    <state width="1419" height="303" key="GridCell.Tab.0.right" timestamp="1586507686686">
+    <state width="1419" height="303" key="GridCell.Tab.0.right" timestamp="1586900619233">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="303" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1586507686686" />
+    <state width="1419" height="303" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1586900619233" />
     <state width="1419" height="245" key="GridCell.Tab.0.right/0.23.1440.797@0.23.1440.797" timestamp="1585971948450" />
-    <state width="1419" height="303" key="GridCell.Tab.1.bottom" timestamp="1586507687805">
+    <state width="1419" height="303" key="GridCell.Tab.1.bottom" timestamp="1586900619241">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="303" key="GridCell.Tab.1.bottom/0.0.1440.900@0.0.1440.900" timestamp="1586507687805" />
+    <state width="1419" height="303" key="GridCell.Tab.1.bottom/0.0.1440.900@0.0.1440.900" timestamp="1586900619241" />
     <state width="1419" height="303" key="GridCell.Tab.1.bottom/0.23.1440.797@0.23.1440.797" timestamp="1585809692296" />
     <state width="1419" height="303" key="GridCell.Tab.1.bottom/0.23.1440.800@0.23.1440.800" timestamp="1585682151440" />
-    <state width="1419" height="303" key="GridCell.Tab.1.center" timestamp="1586507687803">
+    <state width="1419" height="303" key="GridCell.Tab.1.center" timestamp="1586900619238">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="303" key="GridCell.Tab.1.center/0.0.1440.900@0.0.1440.900" timestamp="1586507687803" />
+    <state width="1419" height="303" key="GridCell.Tab.1.center/0.0.1440.900@0.0.1440.900" timestamp="1586900619238" />
     <state width="1419" height="303" key="GridCell.Tab.1.center/0.23.1440.797@0.23.1440.797" timestamp="1585809692294" />
     <state width="1419" height="303" key="GridCell.Tab.1.center/0.23.1440.800@0.23.1440.800" timestamp="1585682151438" />
-    <state width="1419" height="303" key="GridCell.Tab.1.left" timestamp="1586507687802">
+    <state width="1419" height="303" key="GridCell.Tab.1.left" timestamp="1586900619237">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="303" key="GridCell.Tab.1.left/0.0.1440.900@0.0.1440.900" timestamp="1586507687802" />
+    <state width="1419" height="303" key="GridCell.Tab.1.left/0.0.1440.900@0.0.1440.900" timestamp="1586900619237" />
     <state width="1419" height="303" key="GridCell.Tab.1.left/0.23.1440.797@0.23.1440.797" timestamp="1585809692293" />
     <state width="1419" height="303" key="GridCell.Tab.1.left/0.23.1440.800@0.23.1440.800" timestamp="1585682151437" />
-    <state width="1419" height="303" key="GridCell.Tab.1.right" timestamp="1586507687804">
+    <state width="1419" height="303" key="GridCell.Tab.1.right" timestamp="1586900619239">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="303" key="GridCell.Tab.1.right/0.0.1440.900@0.0.1440.900" timestamp="1586507687804" />
+    <state width="1419" height="303" key="GridCell.Tab.1.right/0.0.1440.900@0.0.1440.900" timestamp="1586900619239" />
     <state width="1419" height="303" key="GridCell.Tab.1.right/0.23.1440.797@0.23.1440.797" timestamp="1585809692295" />
     <state width="1419" height="303" key="GridCell.Tab.1.right/0.23.1440.800@0.23.1440.800" timestamp="1585682151439" />
     <state x="229" y="89" key="SettingsEditor" timestamp="1585200797242">
@@ -323,6 +323,11 @@
           <url>file://$PROJECT_DIR$/Simulation/Utils/PreProcess/4_MergeLeakedInfo.py</url>
           <line>34</line>
           <option name="timeStamp" value="33" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Simulation/Utils/PreProcess/PreProcess.py</url>
+          <line>49</line>
+          <option name="timeStamp" value="35" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

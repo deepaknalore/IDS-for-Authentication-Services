@@ -36,7 +36,7 @@ with open(LEAKED_DATA) as csv_file:
                 del temp[passwordIndex]
             else:
                 continue
-        temp = [json.dumps(item) for item in temp]
+        #temp = [json.dumps(item) for item in temp]
         updatedLeakedDataList.append(user + "," + "\"" + str(json.dumps(temp)) + "\"" + "\n")
 
 
