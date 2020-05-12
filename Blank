@@ -22,3 +22,6 @@ L_A => L_A + some passwords are duplicated (40%) (only 1 password per user)
 L_A => L_A - L_U + Some Usernames (10%)
 
 Round-robin - ZIP
+
+2 Strategies -> Estimated -> Some IDS parameters' understanding
+                Precise ->

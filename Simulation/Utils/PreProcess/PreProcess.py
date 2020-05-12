@@ -4,13 +4,16 @@ import csv
 
 LEAKED_DATA = "../../Resources/msn.csv"
 PREPROCESSED_DATA = "../../Resources/msn_pp.csv"
+DUPLICATE_PASSWORD_DATA = "../../Resources/msn_pp1.csv"
 LEGITIMATE_USER_DATA = "../../Resources/user.csv"
 LEAKED_DATA_UPDATED = "../../Resources/updated_msn_pp.csv"
 LEAKED_LEGITIMATE_USERS = "../../Resources/leaked.csv"
+LEAKED_LEGITIMATE_PASSWORDS = "../../Resources/leaked_password.txt"
 
 PASSOWRD_LENGTH_FILTER = 10
 NUMBER_OF_LEGITIMATE_USERS = 10000
 PERCENTAGE_LEAKED = 10
+PASSWORD_DUPLICATION_USERS_PERCENTAGE = 40
 
 
 def getCountOfFile(file):
@@ -37,10 +40,33 @@ def filterMoreFrequentPasswords():
                     continue
                 writer.writerow(row)
 
+def duplicatePasswords():
+    file_counter = getCountOfFile(PREPROCESSED_DATA)
+    length = (int)(PASSWORD_DUPLICATION_USERS_PERCENTAGE * file_counter)/100
+    duplicateList = getRandomList(int(length), file_counter)
+    with open(DUPLICATE_PASSWORD_DATA, "w") as pre_csv_file:
+        writer = csv.writer(pre_csv_file)
+        with open(PREPROCESSED_DATA) as csv_file:
+            line_count = 0
+            for row in csv.reader(csv_file):
+                line_count += 1
+                user = row[0]
+                temp = json.loads(row[1])
+                if line_count in duplicateList:
+                    passwordIndex = random.randint(0, len(temp) - 1)
+                    password = temp[passwordIndex]
+                    temp.append(password)
+                newList = []
+                newList.append(user)
+                newList.append(json.dumps(temp))
+                writer.writerow(newList)
+
+
 def populateLegitimateUserWithLeaks():
     legitimateList = []
     updatedLeakedDataList = []
-    leakedList = []
+    leakedUserList = []
+    leakedPasswordList = []
     file_counter = getCountOfFile(PREPROCESSED_DATA)
     list = getRandomList(NUMBER_OF_LEGITIMATE_USERS,file_counter)
     legitimate_user_data_count = len(list)
@@ -49,7 +75,7 @@ def populateLegitimateUserWithLeaks():
     random.shuffle(tempList)
     pick_leaked_data = tempList[0:leaked_user_count]
 
-    with open(LEAKED_DATA) as csv_file:
+    with open(DUPLICATE_PASSWORD_DATA) as csv_file:
         line_count = 0
         for row in csv.reader(csv_file):
             line_count += 1
@@ -67,8 +93,9 @@ def populateLegitimateUserWithLeaks():
                     else:
                         continue
                 else:
-                    leakedList.append(str(user) + "," + password + "\n")
-            # temp = [json.dumps(item) for item in temp]
+                    leakedUserList.append(str(user) + "\n")
+                    for passw in temp:
+                        leakedPasswordList.append(passw + "\n")
             newList = []
             newList.append(user)
             newList.append(json.dumps(temp))
@@ -85,12 +112,19 @@ def populateLegitimateUserWithLeaks():
 
     # Write it to a leaked csv file
     with open(LEAKED_LEGITIMATE_USERS, "w") as out_file:
-        for element in leakedList:
+        for element in leakedUserList:
+            out_file.write(element)
+        out_file.close()
+
+    # Write it to a leaked csv file
+    with open(LEAKED_LEGITIMATE_PASSWORDS, "w") as out_file:
+        for element in leakedPasswordList:
             out_file.write(element)
         out_file.close()
 
 if __name__ == '__main__':
     filterMoreFrequentPasswords()
+    duplicatePasswords()
     populateLegitimateUserWithLeaks()
 
 
