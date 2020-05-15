@@ -25,7 +25,7 @@ LEAKED_LEGITIMATE_USERS = "../../Resources/leaked.csv"
 LEAKED_LEGITIMATE_PASSWORDS = "../../Resources/leaked_password.txt"
 
 PASSOWRD_LENGTH_FILTER = 10
-NUMBER_OF_LEGITIMATE_USERS = 10000
+NUMBER_OF_LEGITIMATE_USERS = 1000
 PERCENTAGE_LEAKED = 10
 PASSWORD_DUPLICATION_USERS_PERCENTAGE = 40
 
@@ -128,13 +128,11 @@ def populateLegitimateUserWithLeaks():
     with open(LEAKED_LEGITIMATE_USERS, "w") as out_file:
         for element in leakedUserList:
             out_file.write(element)
-        out_file.close()
 
     # Write it to a leaked csv file
     with open(LEAKED_LEGITIMATE_PASSWORDS, "w") as out_file:
         for element in leakedPasswordList:
             out_file.write(element)
-        out_file.close()
 
 if __name__ == '__main__':
     filterMoreFrequentPasswords()

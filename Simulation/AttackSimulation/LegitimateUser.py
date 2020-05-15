@@ -4,11 +4,12 @@ import json
 import time
 import threading
 import queue
+import random
 from copy import deepcopy
 
 start_time = time.time()
 
-LEGITIMATE_USER_DATA = '../../Resources/user.csv'
+LEGITIMATE_USER_DATA = '../Resources/user.csv'
 
 # Threading related information
 q = queue.Queue()
@@ -30,7 +31,7 @@ sucessfulBreach = 0
 blocked = 0
 
 class ThreadClass(threading.Thread):
-    count = 0
+    count = 5
     def __init__(self, q, ip):
         threading.Thread.__init__(self)
         self.q = q
@@ -44,8 +45,8 @@ class ThreadClass(threading.Thread):
             payload = self.q.get()
             self.count += 1
             if self.count == 6:
-                # time.sleep(1)
-                self.count = 1
+                #time.sleep(1)
+                self.count = 5
             payload["metadata"]['IP'] = self.ip
             response = requests.request("POST", url, headers=headers, data=json.dumps(payload))
             data = response.json()
@@ -65,27 +66,37 @@ for i in range(n_thread):
     #Start thread
     t.start()
 
-#commonPasswordList = ['123456', '123456789', 'qwerty', 'password', '111111', '12345678', 'abc123', '1234567', 'password1', '12345']
-commonPasswordList = ['P3Rat54797', '123456', 'FQRG7CS493', '123456789', 'wmtmufc1', 'password1', 'password', 'abc123', 'p3rat54797', '123456a']
+# put all the username, password into a list
+legitimate_list = []
+csvfile = open(LEGITIMATE_USER_DATA)
+readCSV = csv.reader(csvfile, delimiter=',')
+for row in readCSV:
+    payload = {'user': '', 'password': '', 'metadata': ''}
+    metadata = {'IP': '', 'Cookie': 0, 'Redirect': 0, 'UserAgent': ''}
+    userAgent = {'OS': 'MacOSX', 'Browser': 'Chrm'}
+    metadata['UserAgent'] = userAgent
+    payload['metadata'] = metadata
+    payload['user'] = row[0]
+    payload['password'] = row[1]
+    payload['metadata']['IP'] = '1.1.1.1'
+    legitimate_list.append(payload)
 
-for password in commonPasswordList:
-    csvfile = open(LEGITIMATE_USER_DATA)
-    readCSV = csv.reader(csvfile, delimiter=',')
-    total_users = 0
-    for row in readCSV:
-        payload['user'] = row[0]
-        payload['password'] = password
-        payload['metadata']['IP'] = '1.1.1.1'
-        q.put(deepcopy(payload))
-        total_users += 1
-    q.join()
+starttime = time.time()
+request_count = 0
+while True:
+    request_count += 1
+    payload = random.choice(legitimate_list)
+    q.put(deepcopy(payload))
+    if(request_count > 12000):
+        break
+q.join()
 
 print('Number of blocked IPs: ' + str(blocked))
 print('Number of successful breaches: ' + str(sucessfulBreach))
 print('Number of failed auths: ' + str(failedAuth))
 
-print('Number of blocked %: ' + str(blocked/(total_users*len(commonPasswordList)) * 100))
-print('Number of successful breaches: ' + str(sucessfulBreach/(total_users*len(commonPasswordList)) * 100))
-print('Number of failed auths: ' + str(failedAuth/(total_users*len(commonPasswordList)) * 100))
+print('Number of blocked %: ' + str(blocked/request_count * 100))
+print('Number of successful breaches: ' + str(sucessfulBreach/request_count * 100))
+print('Number of failed auths: ' + str(failedAuth/request_count * 100))
 
 print("Total time : %s seconds"  %(time.time() - start_time ))

@@ -4,7 +4,7 @@ import editdistance
 import random
 import sys
 
-LEAKED_DATA = "../Resources/updated_msn_pp.csv"
+LEAKED_DATA = "../Resources/user.csv"
 
 csv.field_size_limit(sys.maxsize)
 
@@ -71,7 +71,9 @@ with open(LEAKED_DATA, "r") as csv_file:
         if len(row) < 2:
             continue
         user = row[0]
-        passwordList = json.loads(row[1])
+        #passwordList = json.loads(row[1])
+        passwordList = []
+        passwordList.append(row[1])
         dict[user] = passwordList
     multiplePasswordFinder(dict)
     frequentPasswords = frequentPasswordsFinder(dict)
@@ -81,6 +83,9 @@ with open(LEAKED_DATA, "r") as csv_file:
     totalPairsNew, pairsWith1EditsNew = editDistanceFinderNew(dict, 1)
     totalPairsNew, pairsWith2EditsNew = editDistanceFinderNew(dict, 2)
     totalPairsNew, pairsWith3EditsNew = editDistanceFinderNew(dict, 3)
+
+for password in frequentPasswords:
+    print(password)
 
 print("########### STATS - Multiple passwords ###########")
 print("Users with multiple passwords: ")
@@ -106,5 +111,3 @@ print("Password pairs where the edit distance is less than 3 " + str(pairsWith3E
 print("Percentage of pairs with edit distance less than 3: " + str(pairsWith3EditsNew*100/totalPairsNew))
 print("\n\n\n\n\n\n\n########### STATS - Frequent passwords ###########")
 print("Most Frequent passwords in descending order: ")
-for password in frequentPasswords:
-    print(password)
