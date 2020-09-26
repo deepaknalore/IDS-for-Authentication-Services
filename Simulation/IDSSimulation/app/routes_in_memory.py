@@ -80,10 +80,12 @@ def blacklist(dict):
 
 def whitelist(dict):
     whitelistcount = 0
+    keys = redis_client.keys("authentication:*")
     seenBefore = 0
     ipcount = 0
     for key in universal_history:
         info = universal_history[key]
+        info = redis_client.hmget(key, ["user", "password", "ip", "authenticated"])
         if int(info['authenticated']) == 1:
             if info['user'] == dict['user'] and info['password'] == dict['password'] and info['ip'] == dict['ip']:
                 seenBefore += 1

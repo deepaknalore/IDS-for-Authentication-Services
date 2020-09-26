@@ -4,7 +4,7 @@ import editdistance
 import random
 import sys
 
-LEAKED_DATA = "../Resources/user.csv"
+LEAKED_DATA = "../Resources/updated_wisc_pp.csv"
 
 csv.field_size_limit(sys.maxsize)
 
@@ -71,9 +71,9 @@ with open(LEAKED_DATA, "r") as csv_file:
         if len(row) < 2:
             continue
         user = row[0]
-        #passwordList = json.loads(row[1])
-        passwordList = []
-        passwordList.append(row[1])
+        passwordList = json.loads(row[1])
+        # passwordList = []
+        # passwordList.append(row[1])
         dict[user] = passwordList
     multiplePasswordFinder(dict)
     frequentPasswords = frequentPasswordsFinder(dict)
@@ -92,22 +92,22 @@ print("Users with multiple passwords: ")
 print(multiplePasswords)
 print("\n\n\n\n\n\n\n########### STATS - Password Edit distances - Old info ###########")
 print("Total number of password pairs compared: " + str(totalPairs))
-print("Password pairs where the edit distance is less than 1 " + str(pairsWith1Edits))
-print("Percentage of pairs with edit distance less than 1: " + str(pairsWith1Edits*100/totalPairs))
-print("Password pairs where the edit distance is less than 2 " + str(pairsWith2Edits))
-print("Percentage of pairs with edit distance less than 2: " + str(pairsWith2Edits*100/totalPairs))
-print("Password pairs where the edit distance is less than 3 " + str(pairsWith3Edits))
-print("Percentage of pairs with edit distance less than 3: " + str(pairsWith3Edits*100/totalPairs))
+if(totalPairs > 0):
+    print("Password pairs where the edit distance is less than 1 " + str(pairsWith1Edits))
+    print("Percentage of pairs with edit distance less than 1: " + str(pairsWith1Edits*100/totalPairs))
+    print("Password pairs where the edit distance is less than 2 " + str(pairsWith2Edits))
+    print("Percentage of pairs with edit distance less than 2: " + str(pairsWith2Edits*100/totalPairs))
+    print("Password pairs where the edit distance is less than 3 " + str(pairsWith3Edits))
+    print("Percentage of pairs with edit distance less than 3: " + str(pairsWith3Edits*100/totalPairs))
 
 
 
 print("\n\n\n\n\n\n\n########### STATS - Password Edit distances - New info ###########")
 print("Total number of password pairs compared: " + str(totalPairsNew))
-print("Password pairs where the edit distance is less than 1 " + str(pairsWith1EditsNew))
-print("Percentage of pairs with edit distance less than 1: " + str(pairsWith1EditsNew*100/totalPairsNew))
-print("Password pairs where the edit distance is less than 2 " + str(pairsWith2EditsNew))
-print("Percentage of pairs with edit distance less than 2: " + str(pairsWith2EditsNew*100/totalPairsNew))
-print("Password pairs where the edit distance is less than 3 " + str(pairsWith3EditsNew))
-print("Percentage of pairs with edit distance less than 3: " + str(pairsWith3EditsNew*100/totalPairsNew))
-print("\n\n\n\n\n\n\n########### STATS - Frequent passwords ###########")
-print("Most Frequent passwords in descending order: ")
+if(totalPairs > 0):
+    print("Password pairs where the edit distance is less than 1 " + str(pairsWith1EditsNew))
+    print("Percentage of pairs with edit distance less than 1: " + str(pairsWith1EditsNew*100/totalPairsNew))
+    print("Password pairs where the edit distance is less than 2 " + str(pairsWith2EditsNew))
+    print("Percentage of pairs with edit distance less than 2: " + str(pairsWith2EditsNew*100/totalPairsNew))
+    print("Password pairs where the edit distance is less than 3 " + str(pairsWith3EditsNew))
+    print("Percentage of pairs with edit distance less than 3: " + str(pairsWith3EditsNew*100/totalPairsNew))

@@ -11,7 +11,6 @@ weight_dict = {""}
 LEGITIMATE_DATABASE = "../Resources/database.db"
 AUTHENTICATION_TRACK_COUNT = 1000
 authentication_request_count = 0
-universal_history = {}
 
 @app.route('/')
 @app.route('/index')
@@ -66,10 +65,12 @@ def flatten_request(request):
 
 def blacklist(dict):
     blacklistcount = 0
+    keys = redis_client.keys("authentication:*")
     failed_count = 0
-    for key in universal_history:
-        info = universal_history[key]
-        if info['password'] == dict['password'] and int(info['authenticated']) == 0:
+    for key in  keys:
+        info = redis_client.hmget(key,["password","authenticated"])
+        info = [x.decode("utf-8")  for x in info]
+        if info[0] == dict['password'] and int(info[1]) == 0:
             failed_count += 1
     if failed_count > 1 and user_exists(dict['user']) == 0:
         blacklistcount += 1 # Weight * rule
@@ -80,14 +81,16 @@ def blacklist(dict):
 
 def whitelist(dict):
     whitelistcount = 0
+    keys = redis_client.keys("authentication:*")
     seenBefore = 0
     ipcount = 0
-    for key in universal_history:
-        info = universal_history[key]
-        if int(info['authenticated']) == 1:
-            if info['user'] == dict['user'] and info['password'] == dict['password'] and info['ip'] == dict['ip']:
+    for key in keys:
+        info = redis_client.hmget(key, ["user", "password", "ip", "authenticated"])
+        info = [x.decode("utf-8") for x in info]
+        if int(info[3]) == 1:
+            if info[0] == dict['user'] and info[1] == dict['password'] and info[2] == dict['ip']:
                 seenBefore += 1
-            if info['ip'] == dict['ip']:
+            if info[2] == dict['ip']:
                 ipcount += 1
     if seenBefore > 5:
         whitelistcount += 1
@@ -124,8 +127,7 @@ def attack():
                 dict['authenticated'] = 1
             else:
                 dict['authenticated'] = 0
-        # Set the authentication back to the DB
-        universal_history["authentication:" + str(authentication_request_count)] = dict
+        redis_client.hmset("authentication:" + str(authentication_request_count), mapping=dict)
         authentication_request_count += 1
         if dict['authenticated'] == 1:
             return jsonify({"Authentication": True}), 200
@@ -134,6 +136,45 @@ def attack():
     except Exception as e:
         print(e)
     return jsonify({"Authentication": False}), 401
+
+
+# @app.route('/attack', methods = ['POST'])
+# def attack():
+#     if not request.json or not 'user' in request.json or not 'password' in request.json or not 'metadata' in request.json:
+#         abort(400)
+#     try:
+#         metadata = request.json['metadata']
+#         ip = metadata['IP']
+#         if(redis_client.exists(ip)):
+#             data = redis_client.get(ip)
+#             ip_stats = json.loads(data)
+#             td = datetime.now() - datetime.strptime(ip_stats['last_time'], '%Y-%m-%d %H:%M:%S.%f')
+#             if (int(td.total_seconds()) >= 1):
+#                 ip_stats['last_time'] = datetime.now()
+#                 ip_stats['count'] = 0
+#             if(ip_stats['count'] <= 5):
+#                 ip_stats['count'] = ip_stats['count'] + 1
+#             if(ip_stats['count'] > 5 and int(td.total_seconds()) < 1):
+#                 return jsonify({"Authentication": "Blocked"}), 201
+#             rval = json.dumps(ip_stats, default=myconverter)
+#             redis_client.set(ip, rval)
+#         else:
+#             ip_stats = {}
+#             ip_stats['count'] = 1
+#             ip_stats['last_time'] = datetime.now()
+#             rval = json.dumps(ip_stats, default = myconverter)
+#             redis_client.set(ip, rval)
+#         with sql.connect("database.db") as con:
+#             cur = con.cursor()
+#             user = request.json['user']
+#             password = request.json['password']
+#             cur.execute("SELECT rowid from USER where name = ? and password = ?", (user, password))
+#             data = cur.fetchone()
+#             if data is not None:
+#                 return jsonify({"Authentication": True}), 200
+#     except Exception as e:
+#         print(e)
+#     return jsonify({"Authentication": False}), 200
 
 @app.route('/authenticate', methods = ['POST'])
 def authenticate():

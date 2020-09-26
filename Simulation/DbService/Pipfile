@@ -4,15 +4,10 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-pytest = "*"
 
 [packages]
-requests = "*"
-flask = "*"
-haveibeenpwnd = "*"
-editdistance = "*"
-ipython = "*"
-flask-redis = "*"
+grpcio = "*"
+grpcio-tools = "*"
 
 [requires]
 python_version = "3.8"

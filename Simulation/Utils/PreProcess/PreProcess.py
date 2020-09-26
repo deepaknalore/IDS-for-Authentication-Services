@@ -1,22 +1,25 @@
 import random
 import json
 import csv
+import sys
+
+csv.field_size_limit(sys.maxsize)
 
 # Main resource which needs to be obtained as is the source for all other files -> U
-LEAKED_DATA = "../../Resources/msn.csv"
+LEAKED_DATA = "../../Resources/wisc.edu.users"
 
 # This file contains only those users whose leaked password is less than 10 ->  PASSOWRD_LENGTH_FILTER
-PREPROCESSED_DATA = "../../Resources/msn_pp.csv"
+PREPROCESSED_DATA = "../../Resources/wisc_pp.csv"
 
 # Here, we are voluntarily duplicating a password for 40 percent of users -> PASSWORD_DUPLICATION_USERS_PERCENTAGE
-DUPLICATE_PASSWORD_DATA = "../../Resources/msn_pp1.csv"
+DUPLICATE_PASSWORD_DATA = "../../Resources/wisc_pp1.csv"
 
 # The list of legitimate user, password pairs -> NUMBER_OF_LEGITIMATE_USERS
 LEGITIMATE_USER_DATA = "../../Resources/user.csv"
 
 # This is the username password, where some of them are taken in as legitimate username, password pairs.
 # Out of the legitimate username, some of them are retained back giving as 'leaked info' -> Percentage of total users leaked
-LEAKED_DATA_UPDATED = "../../Resources/updated_msn_pp.csv"
+LEAKED_DATA_UPDATED = "../../Resources/updated_wisc_pp.csv"
 
 # List of leaked users
 LEAKED_LEGITIMATE_USERS = "../../Resources/leaked.csv"
