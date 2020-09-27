@@ -3,10 +3,8 @@ from datetime import datetime
 import sqlite3 as sql
 from haveibeenpwnd import check_email,check_password
 from flask import request, render_template, jsonify, make_response, abort
-from dbservice import auth_history_pb2,auth_history_pb2_grpc
 import json
 import editdistance
-import grpc
 
 # fill this up
 weight_dict = {""}
@@ -66,70 +64,70 @@ def flatten_request(request):
     dict['browser'] = userAgent['Browser']
     return dict
 
-# Status - 0 = Allowed, 1 = Failed, 2 = Blocked
-def generate_messages(dict,params,threshold):
-    return auth_history_pb2.AuthRequest(
-        user = dict['user'],
-        password = dict['password'],
-        ip = dict['ip'],
-        cookie = dict['cookie'],
-        redirect = dict['redirect'],
-        os = dict['os'],
-        browser = dict['browser'],
-        parameters = params,
-        threshold = threshold
-    )
+def blacklist(dict):
+    blacklistcount = 0
+    failed_count = 0
+    for key in universal_history:
+        info = universal_history[key]
+        if info['password'] == dict['password'] and int(info['authenticated']) == 0:
+            failed_count += 1
+    if failed_count > 1 and user_exists(dict['user']) == 0:
+        blacklistcount += 1 # Weight * rule
 
-def generate_update(dict,result):
-    return auth_history_pb2.AuthRequest(
-        user=dict['user'],
-        password=dict['password'],
-        ip=dict['ip'],
-        cookie=dict['cookie'],
-        redirect=dict['redirect'],
-        os=dict['os'],
-        browser=dict['browser'],
-        status=result
-    )
+    if failed_count > 1 and is_typo(dict['user'],dict['password']) == 0:
+        blacklistcount += 1
+    return  blacklistcount
 
-def blacklist(stub, dict, params, threshold):
-    responses = stub.GetBlockListCount(generate_messages(dict,params,threshold))
-    return responses.count
-
-def whitelist(stub, dict, params, threshold):
-    responses = stub.GetAllowListCount(generate_messages(dict,params,threshold))
-    return responses.count
+def whitelist(dict):
+    whitelistcount = 0
+    seenBefore = 0
+    ipcount = 0
+    for key in universal_history:
+        info = universal_history[key]
+        if int(info['authenticated']) == 1:
+            if info['user'] == dict['user'] and info['password'] == dict['password'] and info['ip'] == dict['ip']:
+                seenBefore += 1
+            if info['ip'] == dict['ip']:
+                ipcount += 1
+    if seenBefore > 5:
+        whitelistcount += 1
+    if ipcount > 10:
+        whitelistcount += 1
+    return whitelistcount
 
 @app.route('/attack', methods = ['POST'])
 def attack():
+    global authentication_request_count
+    if not request.json or not 'user' in request.json or not 'password' in request.json or not 'metadata' in request.json:
+        abort(400)
     dict = flatten_request(request)
+    if authentication_request_count == 1000:
+        authentication_request_count = 0
     try:
         password_match = False
         blocked = False
         with sql.connect(LEGITIMATE_DATABASE) as con:
             cur = con.cursor()
-            user = dict['user']
-            password = dict['password']
+            user = request.json['user']
+            password = request.json['password']
             cur.execute("SELECT rowid from USER where name = ? and password = ?", (user, password))
             data = cur.fetchone()
             if data is not None:
                 password_match = True
-        channel = grpc.insecure_channel('localhost:50051')
-        stub = auth_history_pb2_grpc.AuthHistoryStub(channel)
-        bvalue = blacklist(stub, dict, "ip", 2)
-        wvalue = whitelist(stub, dict, "ip", 5)
+        bvalue = blacklist(dict)
+        wvalue = whitelist(dict)
         if(bvalue > wvalue):
-            result = 2
+            dict['authenticated'] = 0
             blocked = True
         else:
             if password_match:
-                result = 0
+                dict['authenticated'] = 1
             else:
-                result = 1
+                dict['authenticated'] = 0
         # Set the authentication back to the DB
-        stub.PutAuthEntry(generate_update(dict,result))
-        channel.close()
-        if result == 0:
+        universal_history["authentication:" + str(authentication_request_count)] = dict
+        authentication_request_count += 1
+        if dict['authenticated'] == 1:
             return jsonify({"Authentication": True}), 200
         elif blocked == True:
             return jsonify({"Authentication": "Blocked"}), 401

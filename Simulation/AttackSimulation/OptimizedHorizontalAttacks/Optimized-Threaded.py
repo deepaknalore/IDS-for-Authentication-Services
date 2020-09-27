@@ -8,7 +8,7 @@ from copy import deepcopy
 
 start_time = time.time()
 
-LEGITIMATE_USER_DATA = '../../Resources/user.csv'
+LEGITIMATE_USER_DATA = '../Resources/user.csv'
 
 # Threading related information
 q = queue.Queue()
@@ -53,6 +53,7 @@ class ThreadClass(threading.Thread):
                 sucessfulBreach += 1
             elif (data['Authentication'] == False):
                 failedAuth += 1
+                print(self.ip)
             elif (data['Authentication'] == 'Blocked'):
                 blocked += 1
             self.q.task_done()

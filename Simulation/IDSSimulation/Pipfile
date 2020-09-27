@@ -13,6 +13,8 @@ haveibeenpwnd = "*"
 editdistance = "*"
 ipython = "*"
 flask-redis = "*"
+grpcio = "*"
+grpcio-tools = "*"
 
 [requires]
 python_version = "3.8"
