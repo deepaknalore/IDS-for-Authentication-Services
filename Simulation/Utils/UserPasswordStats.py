@@ -4,7 +4,7 @@ import editdistance
 import random
 import sys
 
-LEAKED_DATA = "../Resources/updated_wisc_pp.csv"
+LEAKED_DATA = "../Resources/leaked_attacker.csv"
 
 csv.field_size_limit(sys.maxsize)
 

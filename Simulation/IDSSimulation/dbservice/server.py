@@ -5,7 +5,7 @@ import sqlite3 as sql
 import auth_history_pb2
 import auth_history_pb2_grpc
 
-LIMIT = 1000
+LIMIT = 100000
 
 #### SIMPLIFY this by exposing one API that will look after insertion and deletion
 # Need to redefine the sql parser

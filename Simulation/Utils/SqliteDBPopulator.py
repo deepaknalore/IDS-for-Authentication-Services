@@ -6,7 +6,6 @@ import json
 LEGITIMATE_USER_DATA = "../Resources/user.csv"
 DATABASE = "../Resources/database.db"
 INSERTION_QUERY = "INSERT INTO USER (name,password) VALUES(?,?)"
-NUMBER_OF_ENTRIES = 10000
 
 def process(row,cursor):
     user = row[0]
