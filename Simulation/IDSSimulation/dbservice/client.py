@@ -15,7 +15,7 @@ LIMIT = 1000
 
 # Status - 0 = Allowed, 1 = Failed, 2 = Blocked
 
-def generate_messages():
+def generate_messages(status):
     return auth_history_pb2.AuthRequest(
         user = 'abcd',
         password = 'abcd',
@@ -24,14 +24,14 @@ def generate_messages():
         redirect = 0,
         os = 'abcd',
         browser = 'abcd',
-        parameters = 'ip',
-        threshold = 2
+        parameters = 'ip = "{ip}"',
+        status = status
     )
 
 def get_block_count(stub):
     global LATENCY_B
     a = datetime.datetime.now()
-    responses = stub.GetBlockListCount(generate_messages())
+    responses = stub.GetBlockListCount(generate_messages('1,2'))
     b = datetime.datetime.now()
     LATENCY_B += (b - a).microseconds
     return responses.count
@@ -39,7 +39,7 @@ def get_block_count(stub):
 def get_allow_count(stub):
     global LATENCY_A
     a = datetime.datetime.now()
-    responses = stub.GetAllowListCount(generate_messages())
+    responses = stub.GetAllowListCount(generate_messages('0'))
     b = datetime.datetime.now()
     LATENCY_A += (b - a).microseconds
     return responses.count
@@ -65,8 +65,7 @@ def run():
                                 os = 'abcd',
                                 browser = 'abcd',
                                 parameters = 'ip',
-                                threshold = 2,
-                                status = 1
+                                status = '1'
                                 ))
             b = datetime.datetime.now()
             LATENCY_PUT += (b - a).microseconds
@@ -81,8 +80,7 @@ def run():
                 os='abcd',
                 browser='abcd',
                 parameters='ip',
-                threshold=2,
-                status=0
+                status= '0'
             ))
             b = datetime.datetime.now()
             LATENCY_PUT += (b - a).microseconds

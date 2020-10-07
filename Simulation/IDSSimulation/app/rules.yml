@@ -1,0 +1,11 @@
+---
+- name: rule-1
+  params: 'ip = "{ip}" AND (user = "{user}" OR password = "{password}")'
+  threshold: 5
+  status: '1,2'
+  weight: 1
+- name: rule-2
+  params: 'ip = "{ip}"'
+  threshold: 5
+  status: '0'
+  weight: -1

@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x12\x61uth_history.proto\"\xaf\x01\n\x0b\x41uthRequest\x12\x0c\n\x04user\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\x12\n\n\x02ip\x18\x03 \x01(\t\x12\x0e\n\x06\x63ookie\x18\x04 \x01(\x05\x12\x10\n\x08redirect\x18\x05 \x01(\x05\x12\n\n\x02os\x18\x06 \x01(\t\x12\x0f\n\x07\x62rowser\x18\x07 \x01(\t\x12\x12\n\nparameters\x18\x08 \x01(\t\x12\x11\n\tthreshold\x18\t \x01(\x05\x12\x0e\n\x06status\x18\n \x01(\x05\"\x1f\n\x0e\x41llowListCount\x12\r\n\x05\x63ount\x18\x01 \x01(\x05\"\x1f\n\x0e\x42lockListCount\x12\r\n\x05\x63ount\x18\x01 \x01(\x05\"\x07\n\x05\x45mpty2\xa1\x01\n\x0b\x41uthHistory\x12\x34\n\x11GetAllowListCount\x12\x0c.AuthRequest\x1a\x0f.AllowListCount\"\x00\x12\x34\n\x11GetBlockListCount\x12\x0c.AuthRequest\x1a\x0f.BlockListCount\"\x00\x12&\n\x0cPutAuthEntry\x12\x0c.AuthRequest\x1a\x06.Empty\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x12\x61uth_history.proto\"\x9c\x01\n\x0b\x41uthRequest\x12\x0c\n\x04user\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\x12\n\n\x02ip\x18\x03 \x01(\t\x12\x0e\n\x06\x63ookie\x18\x04 \x01(\x05\x12\x10\n\x08redirect\x18\x05 \x01(\x05\x12\n\n\x02os\x18\x06 \x01(\t\x12\x0f\n\x07\x62rowser\x18\x07 \x01(\t\x12\x12\n\nparameters\x18\x08 \x01(\t\x12\x0e\n\x06status\x18\t \x01(\t\"\x1f\n\x0e\x41llowListCount\x12\r\n\x05\x63ount\x18\x01 \x01(\x05\"\x1f\n\x0e\x42lockListCount\x12\r\n\x05\x63ount\x18\x01 \x01(\x05\"\x07\n\x05\x45mpty2\xa1\x01\n\x0b\x41uthHistory\x12\x34\n\x11GetAllowListCount\x12\x0c.AuthRequest\x1a\x0f.AllowListCount\"\x00\x12\x34\n\x11GetBlockListCount\x12\x0c.AuthRequest\x1a\x0f.BlockListCount\"\x00\x12&\n\x0cPutAuthEntry\x12\x0c.AuthRequest\x1a\x06.Empty\"\x00\x62\x06proto3'
 )
 
 
@@ -90,16 +90,9 @@ _AUTHREQUEST = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='threshold', full_name='AuthRequest.threshold', index=8,
-      number=9, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='status', full_name='AuthRequest.status', index=9,
-      number=10, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
+      name='status', full_name='AuthRequest.status', index=8,
+      number=9, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
@@ -116,7 +109,7 @@ _AUTHREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=23,
-  serialized_end=198,
+  serialized_end=179,
 )
 
 
@@ -147,8 +140,8 @@ _ALLOWLISTCOUNT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=200,
-  serialized_end=231,
+  serialized_start=181,
+  serialized_end=212,
 )
 
 
@@ -179,8 +172,8 @@ _BLOCKLISTCOUNT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=233,
-  serialized_end=264,
+  serialized_start=214,
+  serialized_end=245,
 )
 
 
@@ -204,8 +197,8 @@ _EMPTY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=266,
-  serialized_end=273,
+  serialized_start=247,
+  serialized_end=254,
 )
 
 DESCRIPTOR.message_types_by_name['AuthRequest'] = _AUTHREQUEST
@@ -251,8 +244,8 @@ _AUTHHISTORY = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=276,
-  serialized_end=437,
+  serialized_start=257,
+  serialized_end=418,
   methods=[
   _descriptor.MethodDescriptor(
     name='GetAllowListCount',

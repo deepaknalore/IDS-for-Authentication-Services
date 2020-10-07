@@ -7,6 +7,7 @@ from dbservice import auth_history_pb2,auth_history_pb2_grpc
 import json
 import editdistance
 import grpc
+import yaml
 
 # fill this up
 weight_dict = {""}
@@ -14,6 +15,7 @@ LEGITIMATE_DATABASE = "../Resources/database.db"
 AUTHENTICATION_TRACK_COUNT = 1000
 authentication_request_count = 0
 universal_history = {}
+rules = []
 
 @app.route('/')
 @app.route('/index')
@@ -24,6 +26,10 @@ def myconverter(o):
     if isinstance(o, datetime):
         return o.__str__()
 
+def rules_initializer():
+    global rules
+    with open('app/rules.yml') as f:
+        rules = yaml.load(f, Loader=yaml.FullLoader)
 
 def user_exists(user):
     with sql.connect("database.db") as con:
@@ -67,7 +73,7 @@ def flatten_request(request):
     return dict
 
 # Status - 0 = Allowed, 1 = Failed, 2 = Blocked
-def generate_messages(dict,params,threshold):
+def generate_messages(dict,params,status):
     return auth_history_pb2.AuthRequest(
         user = dict['user'],
         password = dict['password'],
@@ -77,7 +83,7 @@ def generate_messages(dict,params,threshold):
         os = dict['os'],
         browser = dict['browser'],
         parameters = params,
-        threshold = threshold
+        status = status
     )
 
 def generate_update(dict,result):
@@ -92,20 +98,31 @@ def generate_update(dict,result):
         status=result
     )
 
-def blacklist(stub, dict, params, threshold):
-    responses = stub.GetBlockListCount(generate_messages(dict,params,threshold))
-    return responses.count
+def blacklist(stub, dict, rule):
+    responses = stub.GetBlockListCount(generate_messages(dict,rule['params'],rule['status']))
+    if responses.count >= rule['threshold']:
+        return rule['weight']
+    else:
+        return 0
 
-def whitelist(stub, dict, params, threshold):
-    responses = stub.GetAllowListCount(generate_messages(dict,params,threshold))
-    return responses.count
+def whitelist(stub, dict, rule):
+    responses = stub.GetAllowListCount(generate_messages(dict,rule['params'],rule['status']))
+    if responses.count >= rule['threshold']:
+        return rule['weight']
+    else:
+        return 0
 
 @app.route('/attack', methods = ['POST'])
 def attack():
+    global rules
+    if len(rules) == 0:
+        rules_initializer()
     dict = flatten_request(request)
     try:
         password_match = False
         blocked = False
+        wvalue = 0
+        bvalue = 0
         with sql.connect(LEGITIMATE_DATABASE) as con:
             cur = con.cursor()
             user = dict['user']
@@ -116,16 +133,21 @@ def attack():
                 password_match = True
         channel = grpc.insecure_channel('localhost:50051')
         stub = auth_history_pb2_grpc.AuthHistoryStub(channel)
-        bvalue = blacklist(stub, dict, "ip", 2)
-        wvalue = whitelist(stub, dict, "ip", 5)
+        for rule in rules:
+            if(rule['weight'] > 0):
+                wvalue += whitelist(stub, dict, rule)
+            else:
+                bvalue += blacklist(stub, dict, rule)
+            print(bvalue)
+            print(wvalue)
         if(bvalue > wvalue):
-            result = 2
+            result = '2'
             blocked = True
         else:
             if password_match:
-                result = 0
+                result = '0'
             else:
-                result = 1
+                result = '1'
         # Set the authentication back to the DB
         stub.PutAuthEntry(generate_update(dict,result))
         channel.close()

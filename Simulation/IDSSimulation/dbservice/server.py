@@ -39,15 +39,17 @@ def setup_db():
         print(e)
     return conn
 
-def generate_where_clause(request,statuses):
+def generate_where_clause(request):
     where_clause = ""
     if request.parameters is not None:
-        params = request.parameters.split("|")
-        for param in params:
-            where_clause = where_clause + " " + param + "= \'" + getattr(request,param) +"\' AND"
-        for status in statuses:
-            where_clause += " status =" + str(status) + " OR"
-    return where_clause[:-2]
+        where_clause = request.parameters.format(user = request.user, password = request.password, ip = request.ip,
+                                                 cookie = request.cookie, redirect = request.redirect, os = request.os,
+                                                 browser = request.browser)
+        where_clause += " AND ("
+        for status in request.status.split(','):
+            where_clause += " status = " + status + " OR"
+        return where_clause[:-2] + ')'
+    return ""
 
 def insert_into_db(conn, request):
     global counter
@@ -58,7 +60,7 @@ def insert_into_db(conn, request):
     cur.execute(
         "INSERT OR REPLACE INTO auth_history(id,user,password,ip,cookie,redirect,os,browser,status,date) VALUES (?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP)",
         (counter, request.user, request.password, request.ip, request.cookie, request.redirect, request.os, request.browser,
-         request.status))
+         int(request.status)))
     conn.commit()
 
 class AuthHistoryServicer(auth_history_pb2_grpc.AuthHistoryServicer):
@@ -68,40 +70,24 @@ class AuthHistoryServicer(auth_history_pb2_grpc.AuthHistoryServicer):
     def GetAllowListCount(self, request, context):
         conn = sql.connect(db_file)
         cur = conn.cursor()
-        where_clause = generate_where_clause(request,[0])
-        cur.execute("SELECT COUNT(*) FROM auth_history WHERE" + where_clause)
+        where_clause = generate_where_clause(request)
+        print(where_clause)
+        cur.execute("SELECT COUNT(*) FROM auth_history WHERE " + where_clause)
         data = cur.fetchone()
+        print(data)
         conn.close()
-        if request.threshold is not None:
-            if int(data[0]) > request.threshold:
-                result = 1
-            else:
-                result = 0
-        else:
-            if int(data[0]) > allow_list_threshold:
-                result = 1
-            else:
-                result = 0
-        return auth_history_pb2.AllowListCount(count = result)
+        return auth_history_pb2.AllowListCount(count = int(data[0]))
 
     def GetBlockListCount(self, request, context):
         conn = sql.connect(db_file)
         cur = conn.cursor()
-        where_clause = generate_where_clause(request,[1,2])
-        cur.execute("SELECT COUNT(*) FROM auth_history WHERE" + where_clause)
+        where_clause = generate_where_clause(request)
+        print(where_clause)
+        cur.execute("SELECT COUNT(*) FROM auth_history WHERE " + where_clause)
         data = cur.fetchone()
+        print(data)
         conn.close()
-        if request.threshold is not None:
-            if int(data[0]) > request.threshold:
-                result = 1
-            else:
-                result = 0
-        else:
-            if int(data[0]) > allow_list_threshold:
-                result = 1
-            else:
-                result = 0
-        return auth_history_pb2.BlockListCount(count = result)
+        return auth_history_pb2.BlockListCount(count = int(data[0]))
 
     def PutAuthEntry(self, request, context):
         conn = sql.connect(db_file)
