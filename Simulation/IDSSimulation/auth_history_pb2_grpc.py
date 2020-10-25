@@ -24,6 +24,16 @@ class AuthHistoryStub(object):
                 request_serializer=auth__history__pb2.AuthRequest.SerializeToString,
                 response_deserializer=auth__history__pb2.BlockListCount.FromString,
                 )
+        self.GetCustomAllowListCount = channel.unary_unary(
+                '/AuthHistory/GetCustomAllowListCount',
+                request_serializer=auth__history__pb2.AuthRequest.SerializeToString,
+                response_deserializer=auth__history__pb2.AllowListCount.FromString,
+                )
+        self.GetCustomBlockListCount = channel.unary_unary(
+                '/AuthHistory/GetCustomBlockListCount',
+                request_serializer=auth__history__pb2.AuthRequest.SerializeToString,
+                response_deserializer=auth__history__pb2.BlockListCount.FromString,
+                )
         self.PutAuthEntry = channel.unary_unary(
                 '/AuthHistory/PutAuthEntry',
                 request_serializer=auth__history__pb2.AuthRequest.SerializeToString,
@@ -46,6 +56,18 @@ class AuthHistoryServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetCustomAllowListCount(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetCustomBlockListCount(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def PutAuthEntry(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -62,6 +84,16 @@ def add_AuthHistoryServicer_to_server(servicer, server):
             ),
             'GetBlockListCount': grpc.unary_unary_rpc_method_handler(
                     servicer.GetBlockListCount,
+                    request_deserializer=auth__history__pb2.AuthRequest.FromString,
+                    response_serializer=auth__history__pb2.BlockListCount.SerializeToString,
+            ),
+            'GetCustomAllowListCount': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetCustomAllowListCount,
+                    request_deserializer=auth__history__pb2.AuthRequest.FromString,
+                    response_serializer=auth__history__pb2.AllowListCount.SerializeToString,
+            ),
+            'GetCustomBlockListCount': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetCustomBlockListCount,
                     request_deserializer=auth__history__pb2.AuthRequest.FromString,
                     response_serializer=auth__history__pb2.BlockListCount.SerializeToString,
             ),
@@ -109,6 +141,40 @@ class AuthHistory(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/AuthHistory/GetBlockListCount',
+            auth__history__pb2.AuthRequest.SerializeToString,
+            auth__history__pb2.BlockListCount.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetCustomAllowListCount(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/AuthHistory/GetCustomAllowListCount',
+            auth__history__pb2.AuthRequest.SerializeToString,
+            auth__history__pb2.AllowListCount.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetCustomBlockListCount(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/AuthHistory/GetCustomBlockListCount',
             auth__history__pb2.AuthRequest.SerializeToString,
             auth__history__pb2.BlockListCount.FromString,
             options, channel_credentials,

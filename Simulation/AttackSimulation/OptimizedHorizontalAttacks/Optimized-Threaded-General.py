@@ -15,7 +15,7 @@ q = queue.Queue()
 n_thread = 10
 
 payload = {'user':'', 'password': '', 'metadata' : ''}
-metadata = {'IP': '', 'Cookie': 0, 'Redirect' : 0, 'UserAgent' : ''}
+metadata = {'IP': '', 'Cookie': 0, 'Redirect' : 0, 'UserAgent' : '', 'Attack' : 1}
 userAgent = {'OS': 'MacOSX','Browser': 'Chrm'}
 metadata['UserAgent'] = userAgent
 payload['metadata'] = metadata
@@ -75,6 +75,7 @@ for password in commonPasswordList:
         payload['user'] = row[0]
         payload['password'] = password
         payload['metadata']['IP'] = '1.1.1.1'
+        payload['metadata']['Attack'] = 1
         q.put(deepcopy(payload))
         total_users += 1
     q.join()

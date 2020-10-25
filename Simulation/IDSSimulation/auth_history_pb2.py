@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x12\x61uth_history.proto\"\x9c\x01\n\x0b\x41uthRequest\x12\x0c\n\x04user\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\x12\n\n\x02ip\x18\x03 \x01(\t\x12\x0e\n\x06\x63ookie\x18\x04 \x01(\x05\x12\x10\n\x08redirect\x18\x05 \x01(\x05\x12\n\n\x02os\x18\x06 \x01(\t\x12\x0f\n\x07\x62rowser\x18\x07 \x01(\t\x12\x12\n\nparameters\x18\x08 \x01(\t\x12\x0e\n\x06status\x18\t \x01(\t\"\x1f\n\x0e\x41llowListCount\x12\r\n\x05\x63ount\x18\x01 \x01(\x05\"\x1f\n\x0e\x42lockListCount\x12\r\n\x05\x63ount\x18\x01 \x01(\x05\"\x07\n\x05\x45mpty2\xa1\x01\n\x0b\x41uthHistory\x12\x34\n\x11GetAllowListCount\x12\x0c.AuthRequest\x1a\x0f.AllowListCount\"\x00\x12\x34\n\x11GetBlockListCount\x12\x0c.AuthRequest\x1a\x0f.BlockListCount\"\x00\x12&\n\x0cPutAuthEntry\x12\x0c.AuthRequest\x1a\x06.Empty\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x12\x61uth_history.proto\"\x9c\x01\n\x0b\x41uthRequest\x12\x0c\n\x04user\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\x12\n\n\x02ip\x18\x03 \x01(\t\x12\x0e\n\x06\x63ookie\x18\x04 \x01(\x05\x12\x10\n\x08redirect\x18\x05 \x01(\x05\x12\n\n\x02os\x18\x06 \x01(\t\x12\x0f\n\x07\x62rowser\x18\x07 \x01(\t\x12\x12\n\nparameters\x18\x08 \x01(\t\x12\x0e\n\x06status\x18\t \x01(\t\"\x1f\n\x0e\x41llowListCount\x12\r\n\x05\x63ount\x18\x01 \x01(\x05\"\x1f\n\x0e\x42lockListCount\x12\r\n\x05\x63ount\x18\x01 \x01(\x05\"\x07\n\x05\x45mpty2\x99\x02\n\x0b\x41uthHistory\x12\x34\n\x11GetAllowListCount\x12\x0c.AuthRequest\x1a\x0f.AllowListCount\"\x00\x12\x34\n\x11GetBlockListCount\x12\x0c.AuthRequest\x1a\x0f.BlockListCount\"\x00\x12:\n\x17GetCustomAllowListCount\x12\x0c.AuthRequest\x1a\x0f.AllowListCount\"\x00\x12:\n\x17GetCustomBlockListCount\x12\x0c.AuthRequest\x1a\x0f.BlockListCount\"\x00\x12&\n\x0cPutAuthEntry\x12\x0c.AuthRequest\x1a\x06.Empty\"\x00\x62\x06proto3'
 )
 
 
@@ -245,7 +245,7 @@ _AUTHHISTORY = _descriptor.ServiceDescriptor(
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
   serialized_start=257,
-  serialized_end=418,
+  serialized_end=538,
   methods=[
   _descriptor.MethodDescriptor(
     name='GetAllowListCount',
@@ -268,9 +268,29 @@ _AUTHHISTORY = _descriptor.ServiceDescriptor(
     create_key=_descriptor._internal_create_key,
   ),
   _descriptor.MethodDescriptor(
+    name='GetCustomAllowListCount',
+    full_name='AuthHistory.GetCustomAllowListCount',
+    index=2,
+    containing_service=None,
+    input_type=_AUTHREQUEST,
+    output_type=_ALLOWLISTCOUNT,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='GetCustomBlockListCount',
+    full_name='AuthHistory.GetCustomBlockListCount',
+    index=3,
+    containing_service=None,
+    input_type=_AUTHREQUEST,
+    output_type=_BLOCKLISTCOUNT,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
     name='PutAuthEntry',
     full_name='AuthHistory.PutAuthEntry',
-    index=2,
+    index=4,
     containing_service=None,
     input_type=_AUTHREQUEST,
     output_type=_EMPTY,

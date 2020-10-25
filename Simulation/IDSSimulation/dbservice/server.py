@@ -40,15 +40,27 @@ def setup_db():
     return conn
 
 def generate_where_clause(request):
-    where_clause = ""
     if request.parameters is not None:
         where_clause = request.parameters.format(user = request.user, password = request.password, ip = request.ip,
                                                  cookie = request.cookie, redirect = request.redirect, os = request.os,
                                                  browser = request.browser)
         where_clause += " AND ("
-        for status in request.status.split(','):
-            where_clause += " status = " + status + " OR"
-        return where_clause[:-2] + ')'
+        if request.status is not None:
+            for status in request.status.split(','):
+                where_clause += " status = " + status + " OR"
+            return where_clause[:-2] + ')'
+    return ""
+
+def generate_sql_query(request):
+    if request.parameters is not None:
+        sql_query = request.parameters.format(user = request.user, password = request.password, ip = request.ip,
+                                                 cookie = request.cookie, redirect = request.redirect, os = request.os,
+                                                 browser = request.browser)
+        print(sql_query)
+        # sql_query += " AND ("
+        # for status in request.status.split(','):
+        #     sql_query += " status = " + status + " OR"
+        return sql_query[:-2] + ')'
     return ""
 
 def insert_into_db(conn, request):
@@ -71,7 +83,6 @@ class AuthHistoryServicer(auth_history_pb2_grpc.AuthHistoryServicer):
         conn = sql.connect(db_file)
         cur = conn.cursor()
         where_clause = generate_where_clause(request)
-        print(where_clause)
         cur.execute("SELECT COUNT(*) FROM auth_history WHERE " + where_clause)
         data = cur.fetchone()
         print(data)
@@ -82,8 +93,31 @@ class AuthHistoryServicer(auth_history_pb2_grpc.AuthHistoryServicer):
         conn = sql.connect(db_file)
         cur = conn.cursor()
         where_clause = generate_where_clause(request)
-        print(where_clause)
         cur.execute("SELECT COUNT(*) FROM auth_history WHERE " + where_clause)
+        data = cur.fetchone()
+        print(data)
+        conn.close()
+        return auth_history_pb2.BlockListCount(count = int(data[0]))
+
+    def GetCustomAllowListCount(self, request, context):
+        print("This is how it works")
+        conn = sql.connect(db_file)
+        cur = conn.cursor()
+        sql_query = generate_sql_query(request)
+        print(sql_query)
+        cur.execute(sql_query)
+        data = cur.fetchone()
+        print(data)
+        conn.close()
+        return auth_history_pb2.AllowListCount(count = int(data[0]))
+
+    def GetCustomBlockListCount(self, request, context):
+        print("This is how it works")
+        conn = sql.connect(db_file)
+        cur = conn.cursor()
+        sql_query = generate_sql_query(request)
+        print(sql_query)
+        cur.execute(sql_query)
         data = cur.fetchone()
         print(data)
         conn.close()

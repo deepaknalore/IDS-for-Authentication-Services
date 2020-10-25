@@ -1,0 +1,7 @@
+---
+- name: ip
+  type: counter
+  params: 'ip = "{ip}"'
+  threshold: 10
+  status: '1,2'
+  weight: -1

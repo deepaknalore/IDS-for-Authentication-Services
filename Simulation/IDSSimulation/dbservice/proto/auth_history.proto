@@ -3,6 +3,8 @@ syntax = "proto3";
 service AuthHistory {
     rpc GetAllowListCount(AuthRequest) returns (AllowListCount) {}
     rpc GetBlockListCount(AuthRequest) returns (BlockListCount) {}
+    rpc GetCustomAllowListCount(AuthRequest) returns (AllowListCount) {}
+    rpc GetCustomBlockListCount(AuthRequest) returns (BlockListCount) {}
     rpc PutAuthEntry(AuthRequest) returns (Empty) {}
 }
 

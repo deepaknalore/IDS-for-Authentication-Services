@@ -3,7 +3,7 @@ import csv
 import json
 
 payload = {'user':'', 'password': '', 'metadata' : ''}
-metadata = {'IP': '', 'Cookie': 0, 'Redirect' : 0, 'UserAgent' : ''}
+metadata = {'IP': '', 'Cookie': 0, 'Redirect' : 0, 'UserAgent' : '', 'Attack' : 1}
 userAgent = {'OS': 'MacOSX','Browser': 'Chrm'}
 metadata['UserAgent'] = userAgent
 payload['metadata'] = metadata

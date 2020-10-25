@@ -16,6 +16,7 @@ flask-redis = "*"
 grpcio = "*"
 grpcio-tools = "*"
 pyyaml = "*"
+zxcvbn-python = "*"
 
 [requires]
 python_version = "3.8"

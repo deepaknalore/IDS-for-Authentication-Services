@@ -7,7 +7,7 @@ start_time = time.time()
 local_database = '../../Resources/user.csv'
 
 payload = {'user':'', 'password': '', 'metadata' : ''}
-metadata = {'IP': '', 'Cookie': 0, 'Redirect' : 0, 'UserAgent' : ''}
+metadata = {'IP': '', 'Cookie': 0, 'Redirect' : 0, 'UserAgent' : '', 'Attack' : True}
 userAgent = {'OS': 'MacOSX','Browser': 'Chrm'}
 metadata['UserAgent'] = userAgent
 payload['metadata'] = metadata

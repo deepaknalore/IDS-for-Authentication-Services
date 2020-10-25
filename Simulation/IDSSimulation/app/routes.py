@@ -8,6 +8,7 @@ import json
 import editdistance
 import grpc
 import yaml
+from app import inbuilt
 
 # fill this up
 weight_dict = {""}
@@ -16,6 +17,7 @@ AUTHENTICATION_TRACK_COUNT = 1000
 authentication_request_count = 0
 universal_history = {}
 rules = []
+TRAINING = True
 
 @app.route('/')
 @app.route('/index')
@@ -28,7 +30,7 @@ def myconverter(o):
 
 def rules_initializer():
     global rules
-    with open('app/rules.yml') as f:
+    with open('app/stop_guessing.yml') as f:
         rules = yaml.load(f, Loader=yaml.FullLoader)
 
 def user_exists(user):
@@ -70,6 +72,8 @@ def flatten_request(request):
     userAgent = metadata['UserAgent']
     dict['os'] = userAgent['OS']
     dict['browser'] = userAgent['Browser']
+    if TRAINING:
+        dict['attack'] = metadata['Attack']
     return dict
 
 # Status - 0 = Allowed, 1 = Failed, 2 = Blocked
@@ -98,15 +102,33 @@ def generate_update(dict,result):
         status=result
     )
 
-def blacklist(stub, dict, rule):
+def blocklist(stub, dict, rule):
     responses = stub.GetBlockListCount(generate_messages(dict,rule['params'],rule['status']))
     if responses.count >= rule['threshold']:
         return rule['weight']
     else:
         return 0
 
-def whitelist(stub, dict, rule):
+def allowlist(stub, dict, rule):
     responses = stub.GetAllowListCount(generate_messages(dict,rule['params'],rule['status']))
+    if responses.count >= rule['threshold']:
+        return rule['weight']
+    else:
+        return 0
+
+def custom_blocklist(stub, dict, rule):
+    if 'status' not in rule:
+        rule['status'] = ''
+    responses = stub.GetCustomBlockListCount(generate_messages(dict,rule['params'],rule['status']))
+    if responses.count >= rule['threshold']:
+        return rule['weight']
+    else:
+        return 0
+
+def custom_allowlist(stub, dict, rule):
+    if 'status' not in rule:
+        rule['status'] = ''
+    responses = stub.GetCustomAllowListCount(generate_messages(dict, rule['params'], rule['status']))
     if responses.count >= rule['threshold']:
         return rule['weight']
     else:
@@ -133,14 +155,46 @@ def attack():
                 password_match = True
         channel = grpc.insecure_channel('localhost:50051')
         stub = auth_history_pb2_grpc.AuthHistoryStub(channel)
+        trainInfo = []
         for rule in rules:
-            if(rule['weight'] > 0):
-                wvalue += whitelist(stub, dict, rule)
+            if(rule['type'] == 'inbuilt'):
+                result = getattr(inbuilt, rule['function'])(dict)
+                if (rule['weight'] > 0):
+                    wvalue += result * rule['weight']
+                else:
+                    bvalue += result * rule['weight']
+                trainInfo.append(result)
+                print(rule['name'] + str(result))
+            elif(rule['type'] == 'custom'):
+                if (rule['weight'] > 0):
+                    temp = custom_allowlist(stub, dict, rule)
+                    wvalue += temp * rule['weight']
+                    trainInfo.append(temp)
+                    print(rule['name'] + str(temp))
+                else:
+                    temp = custom_blocklist(stub, dict, rule)
+                    bvalue += temp * rule['weight']
+                    trainInfo.append(temp)
+                    print(rule['name'] + str(temp))
             else:
-                bvalue += blacklist(stub, dict, rule)
-            print(bvalue)
-            print(wvalue)
-        if(bvalue > wvalue):
+                if(rule['weight'] > 0):
+                    temp = allowlist(stub, dict, rule)
+                    wvalue += temp * rule['weight']
+                    trainInfo.append(temp)
+                    print(rule['name'] + str(temp))
+                else:
+                    temp = blocklist(stub, dict, rule)
+                    bvalue += temp * rule['weight']
+                    trainInfo.append(temp)
+                    print(rule['name'] + str(temp))
+        print("Blocklist: " + str(bvalue))
+        print("Allowlist: " + str(wvalue))
+        if TRAINING:
+            f = open("train.txt", "a+")
+            trainInfo = ','.join(str(info) for info in trainInfo)
+            trainInfo += "," + str(dict['attack'])
+            f.write(trainInfo + "\n")
+        if(bvalue + wvalue < 0):
             result = '2'
             blocked = True
         else:
@@ -151,7 +205,7 @@ def attack():
         # Set the authentication back to the DB
         stub.PutAuthEntry(generate_update(dict,result))
         channel.close()
-        if result == 0:
+        if result == '0':
             return jsonify({"Authentication": True}), 200
         elif blocked == True:
             return jsonify({"Authentication": "Blocked"}), 401

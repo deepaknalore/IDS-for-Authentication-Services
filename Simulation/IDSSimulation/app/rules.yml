@@ -1,11 +1,27 @@
 ---
-- name: rule-1
-  params: 'ip = "{ip}" AND (user = "{user}" OR password = "{password}")'
-  threshold: 5
-  status: '1,2'
-  weight: 1
-- name: rule-2
-  params: 'ip = "{ip}"'
-  threshold: 5
-  status: '0'
-  weight: -1
+#- name: rule-1
+#  type: counter
+#  params: 'ip = "{ip}" AND (user = "{user}" OR password = "{password}")'
+#  threshold: 5
+#  status: '1,2'
+#  weight: 1
+#- name: rule-2
+#  type: counter
+#  params: 'ip = "{ip}"'
+#  threshold: 5
+#  status: '0'
+#  weight: -1
+#- name: rule-3
+#  type: custom
+#  params: 'SELECT COUNT(*) FROM auth_history WHERE ip = "{ip}"'
+#  threshold: 5
+#  status: '0'
+#  weight: -1
+#- name: rule-4
+#  type: inbuilt
+#  function: password_strength
+#  weight: 2
+- name: rule-5
+  type: inbuilt
+  function: typo
+  weight: 3
