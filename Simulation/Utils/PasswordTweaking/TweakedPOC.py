@@ -5,10 +5,10 @@ from itertools import chain
 from collections import OrderedDict
 
 
-TWEAKED_DB = "../../Resources/tweaked.db"
-LEAKED_LEGITIMATE_USERS = "../../Resources/leaked.csv"
-LEAKED_DATA_UPDATED = "../../Resources/updated_msn_pp.csv"
-TWEAKED_ATTACK_INPUT = "../../Resources/tweaked_attack.csv"
+TWEAKED_DB = "../Resources/tweaked.db"
+LEAKED_LEGITIMATE_USERS = "../Resources/leaked_user.txt"
+LEAKED_DATA_UPDATED = "../Resources/leaked_attacker.csv"
+TWEAKED_ATTACK_INPUT = "../Resources/tweaked_attack.csv"
 
 db = pickledb.load(TWEAKED_DB, False)
 

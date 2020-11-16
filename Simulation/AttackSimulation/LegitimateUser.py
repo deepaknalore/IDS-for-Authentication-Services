@@ -29,20 +29,25 @@ headers = {
 failedAuth = 0
 sucessfulBreach = 0
 blocked = 0
+ip_count = 1
 
 class ThreadClass(threading.Thread):
     def __init__(self, q, ip):
         threading.Thread.__init__(self)
         self.q = q
-        self.ip = "1.1.1." + str(ip+5)
+        self.ip = "1.1.1." + str(ip)
 
     def run(self):
         global sucessfulBreach
         global failedAuth
         global blocked
+        global ip_count
         while True:
             payload = self.q.get()
-            payload["metadata"]['IP'] = self.ip
+            payload["metadata"]['IP'] = "1.1.1." + str(ip_count)
+            ip_count += 1
+            if(ip_count) > 10:
+                ip_count = 1
             response = requests.request("POST", url, headers=headers, data=json.dumps(payload))
             data = response.json()
             if (data['Authentication'] == True):
@@ -75,6 +80,7 @@ for row in readCSV:
     payload['password'] = row[1]
     payload['metadata']['IP'] = '1.1.1.1'
     payload['metadata']['Attack'] = -1
+    payload['metadata']['Cookie'] = random.choices([0,1],[0.5,0.5])[0]
     legitimate_list.append(payload)
 
 starttime = time.time()

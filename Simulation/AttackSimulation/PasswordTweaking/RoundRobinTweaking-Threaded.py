@@ -8,7 +8,7 @@ from copy import deepcopy
 
 start_time = time.time()
 
-LEGITIMATE_USER_DATA = '../Resources/user.csv'
+TWEAKED_PASSWORD_LIST = "../Resources/tweaked_attack.csv"
 
 # Threading related information
 q = queue.Queue()
@@ -67,27 +67,27 @@ for i in range(n_thread):
     #Start thread
     t.start()
 
-commonPasswordList = ['madison', 'password', '123456', 'badgers', 'password1', 'badger1', 'opensesame', 'linkedin', 'wisconsin', 'badger', 'madison1']
-
-for password in commonPasswordList:
-    csvfile = open(LEGITIMATE_USER_DATA)
-    readCSV = csv.reader(csvfile, delimiter=',')
-    total_users = 0
-    for row in readCSV:
-        payload['user'] = row[0]
-        payload['password'] = password
-        payload['metadata']['IP'] = '1.1.1.1'
-        payload['metadata']['Attack'] = 1
-        q.put(deepcopy(payload))
-        total_users += 1
+with open(TWEAKED_PASSWORD_LIST) as csv_file:
+    total_attacks = 0
+    attack_count = 0
+    for row in csv.reader(csv_file):
+        user = row[0]
+        password_list = json.loads(row[1])
+        payload['user'] = user
+        for password in password_list:
+            payload['password'] = password
+            payload['metadata']['IP'] = '1.1.1.1'
+            payload['metadata']['Attack'] = 1
+            q.put(deepcopy(payload))
+            total_attacks += 1
     q.join()
 
 print('Number of blocked IPs: ' + str(blocked))
 print('Number of successful breaches: ' + str(sucessfulBreach))
 print('Number of failed auths: ' + str(failedAuth))
 
-print('Number of blocked %: ' + str(blocked/(total_users*len(commonPasswordList)) * 100))
-print('Number of successful breaches: ' + str(sucessfulBreach/(total_users*len(commonPasswordList)) * 100))
-print('Number of failed auths: ' + str(failedAuth/(total_users*len(commonPasswordList)) * 100))
+print('Number of blocked %: ' + str(blocked/total_attacks * 100))
+print('Number of successful breaches: ' + str(sucessfulBreach/total_attacks * 100))
+print('Number of failed auths: ' + str(failedAuth/total_attacks * 100))
 
 print("Total time : %s seconds"  %(time.time() - start_time ))

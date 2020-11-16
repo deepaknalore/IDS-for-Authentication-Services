@@ -2,6 +2,6 @@
 - name: ip
   type: counter
   params: 'ip = "{ip}"'
-  threshold: 10
+  threshold: 10000
   status: '1,2'
   weight: -1

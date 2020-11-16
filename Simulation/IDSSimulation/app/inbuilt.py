@@ -7,7 +7,7 @@ LEGITIMATE_DATABASE = "../Resources/database.db"
 
 def password_strength(request):
     results = zxcvbn(request['password'])
-    return results['guesses_log10']
+    return int(results['score'])
 
 def typo(request):
     with sql.connect(LEGITIMATE_DATABASE) as con:

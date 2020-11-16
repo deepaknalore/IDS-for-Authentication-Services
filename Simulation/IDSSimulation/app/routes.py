@@ -104,15 +104,15 @@ def generate_update(dict,result):
 
 def blocklist(stub, dict, rule):
     responses = stub.GetBlockListCount(generate_messages(dict,rule['params'],rule['status']))
-    if responses.count >= rule['threshold']:
-        return rule['weight']
+    if responses.count > rule['threshold']:
+        return 1
     else:
         return 0
 
 def allowlist(stub, dict, rule):
     responses = stub.GetAllowListCount(generate_messages(dict,rule['params'],rule['status']))
-    if responses.count >= rule['threshold']:
-        return rule['weight']
+    if responses.count > rule['threshold']:
+        return 1
     else:
         return 0
 
@@ -120,8 +120,8 @@ def custom_blocklist(stub, dict, rule):
     if 'status' not in rule:
         rule['status'] = ''
     responses = stub.GetCustomBlockListCount(generate_messages(dict,rule['params'],rule['status']))
-    if responses.count >= rule['threshold']:
-        return rule['weight']
+    if responses.count > rule['threshold']:
+        return 1
     else:
         return 0
 
@@ -129,8 +129,8 @@ def custom_allowlist(stub, dict, rule):
     if 'status' not in rule:
         rule['status'] = ''
     responses = stub.GetCustomAllowListCount(generate_messages(dict, rule['params'], rule['status']))
-    if responses.count >= rule['threshold']:
-        return rule['weight']
+    if responses.count > rule['threshold']:
+        return 1
     else:
         return 0
 
@@ -159,6 +159,10 @@ def attack():
         for rule in rules:
             if(rule['type'] == 'inbuilt'):
                 result = getattr(inbuilt, rule['function'])(dict)
+                if result > rule['threshold']:
+                    result = 1
+                else:
+                    result = 0
                 if (rule['weight'] > 0):
                     wvalue += result * rule['weight']
                 else:
@@ -194,7 +198,7 @@ def attack():
             trainInfo = ','.join(str(info) for info in trainInfo)
             trainInfo += "," + str(dict['attack'])
             f.write(trainInfo + "\n")
-        if(bvalue + wvalue < 0):
+        if(bvalue + wvalue > 0):
             result = '2'
             blocked = True
         else:

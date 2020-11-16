@@ -3,7 +3,7 @@ import time
 import requests
 import csv
 
-TWEAKED_PASSWORD_LIST = "../../Resources/tweaked_attack.csv"
+TWEAKED_PASSWORD_LIST = "../Resources/tweaked_attack.csv"
 
 start_time = time.time()
 

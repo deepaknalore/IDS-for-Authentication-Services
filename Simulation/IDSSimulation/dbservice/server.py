@@ -5,7 +5,7 @@ import sqlite3 as sql
 import auth_history_pb2
 import auth_history_pb2_grpc
 
-LIMIT = 100000
+LIMIT = 10000
 
 #### SIMPLIFY this by exposing one API that will look after insertion and deletion
 # Need to redefine the sql parser
@@ -56,11 +56,7 @@ def generate_sql_query(request):
         sql_query = request.parameters.format(user = request.user, password = request.password, ip = request.ip,
                                                  cookie = request.cookie, redirect = request.redirect, os = request.os,
                                                  browser = request.browser)
-        print(sql_query)
-        # sql_query += " AND ("
-        # for status in request.status.split(','):
-        #     sql_query += " status = " + status + " OR"
-        return sql_query[:-2] + ')'
+        return sql_query
     return ""
 
 def insert_into_db(conn, request):
@@ -85,7 +81,6 @@ class AuthHistoryServicer(auth_history_pb2_grpc.AuthHistoryServicer):
         where_clause = generate_where_clause(request)
         cur.execute("SELECT COUNT(*) FROM auth_history WHERE " + where_clause)
         data = cur.fetchone()
-        print(data)
         conn.close()
         return auth_history_pb2.AllowListCount(count = int(data[0]))
 
@@ -95,31 +90,24 @@ class AuthHistoryServicer(auth_history_pb2_grpc.AuthHistoryServicer):
         where_clause = generate_where_clause(request)
         cur.execute("SELECT COUNT(*) FROM auth_history WHERE " + where_clause)
         data = cur.fetchone()
-        print(data)
         conn.close()
         return auth_history_pb2.BlockListCount(count = int(data[0]))
 
     def GetCustomAllowListCount(self, request, context):
-        print("This is how it works")
         conn = sql.connect(db_file)
         cur = conn.cursor()
         sql_query = generate_sql_query(request)
-        print(sql_query)
         cur.execute(sql_query)
         data = cur.fetchone()
-        print(data)
         conn.close()
         return auth_history_pb2.AllowListCount(count = int(data[0]))
 
     def GetCustomBlockListCount(self, request, context):
-        print("This is how it works")
         conn = sql.connect(db_file)
         cur = conn.cursor()
         sql_query = generate_sql_query(request)
-        print(sql_query)
         cur.execute(sql_query)
         data = cur.fetchone()
-        print(data)
         conn.close()
         return auth_history_pb2.BlockListCount(count = int(data[0]))
 
