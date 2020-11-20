@@ -46,7 +46,7 @@ class ThreadClass(threading.Thread):
             payload = self.q.get()
             payload["metadata"]['IP'] = "1.1.1." + str(ip_count)
             ip_count += 1
-            if(ip_count) > 10:
+            if(ip_count) > 100:
                 ip_count = 1
             response = requests.request("POST", url, headers=headers, data=json.dumps(payload))
             data = response.json()

@@ -17,6 +17,7 @@ grpcio = "*"
 grpcio-tools = "*"
 pyyaml = "*"
 zxcvbn-python = "*"
+sklearn = "*"
 
 [requires]
 python_version = "3.8"

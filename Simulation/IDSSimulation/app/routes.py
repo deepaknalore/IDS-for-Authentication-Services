@@ -9,6 +9,9 @@ import editdistance
 import grpc
 import yaml
 from app import inbuilt
+from sklearn import linear_model
+import numpy as np
+import pickle
 
 # fill this up
 weight_dict = {""}
@@ -18,6 +21,7 @@ authentication_request_count = 0
 universal_history = {}
 rules = []
 TRAINING = True
+MODEL = 'lor.sav'
 
 @app.route('/')
 @app.route('/index')
@@ -104,35 +108,39 @@ def generate_update(dict,result):
 
 def blocklist(stub, dict, rule):
     responses = stub.GetBlockListCount(generate_messages(dict,rule['params'],rule['status']))
-    if responses.count > rule['threshold']:
-        return 1
-    else:
-        return 0
+    return responses.count
+    # if responses.count > rule['threshold']:
+    #     return 1
+    # else:
+    #     return 0
 
 def allowlist(stub, dict, rule):
     responses = stub.GetAllowListCount(generate_messages(dict,rule['params'],rule['status']))
-    if responses.count > rule['threshold']:
-        return 1
-    else:
-        return 0
+    return responses.count
+    # if responses.count > rule['threshold']:
+    #     return 1
+    # else:
+    #     return 0
 
 def custom_blocklist(stub, dict, rule):
     if 'status' not in rule:
         rule['status'] = ''
     responses = stub.GetCustomBlockListCount(generate_messages(dict,rule['params'],rule['status']))
-    if responses.count > rule['threshold']:
-        return 1
-    else:
-        return 0
+    return responses.count
+    # if responses.count > rule['threshold']:
+    #     return 1
+    # else:
+    #     return 0
 
 def custom_allowlist(stub, dict, rule):
     if 'status' not in rule:
         rule['status'] = ''
     responses = stub.GetCustomAllowListCount(generate_messages(dict, rule['params'], rule['status']))
-    if responses.count > rule['threshold']:
-        return 1
-    else:
-        return 0
+    return responses.count
+    # if responses.count > rule['threshold']:
+    #     return 1
+    # else:
+    #     return 0
 
 @app.route('/attack', methods = ['POST'])
 def attack():
@@ -159,6 +167,7 @@ def attack():
         for rule in rules:
             if(rule['type'] == 'inbuilt'):
                 result = getattr(inbuilt, rule['function'])(dict)
+                trainInfo.append(result)
                 if result > rule['threshold']:
                     result = 1
                 else:
@@ -167,7 +176,7 @@ def attack():
                     wvalue += result * rule['weight']
                 else:
                     bvalue += result * rule['weight']
-                trainInfo.append(result)
+                # trainInfo.append(result)
                 print(rule['name'] + str(result))
             elif(rule['type'] == 'custom'):
                 if (rule['weight'] > 0):
@@ -195,10 +204,13 @@ def attack():
         print("Allowlist: " + str(wvalue))
         if TRAINING:
             f = open("train.txt", "a+")
+            loaded_model = pickle.load(open(MODEL, 'rb'))
+            Y_pred = loaded_model.predict([trainInfo])
             trainInfo = ','.join(str(info) for info in trainInfo)
             trainInfo += "," + str(dict['attack'])
             f.write(trainInfo + "\n")
-        if(bvalue + wvalue > 0):
+        # if(bvalue + wvalue > 0):
+        if (int(Y_pred[0]) == 1):
             result = '2'
             blocked = True
         else:

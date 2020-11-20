@@ -2,24 +2,24 @@
 - name: 'penalize frequently guessed password'
   type: custom
   params: 'SELECT COUNT(*) FROM (SELECT COUNT(*) FROM auth_history WHERE (STATUS = 1 OR STATUS = 2) AND password IN (SELECT DISTINCT password from auth_history WHERE ip ="{ip}") GROUP BY password HAVING COUNT(*) > 1)'
-  weight: 0
+  weight: -0.03399443
   threshold: 2
 - name: 'defend weakest account'
   type: inbuilt
   function: password_strength
-  weight: -0.260942237
+  weight: -2.88882011
   threshold: 2
 - name: 'penalize typos'
   type: inbuilt
   function: typo
-  weight: 0.337573324
+  weight: 0.27682413
   threshold: 2
 - name: 'ignore_repeat_username_and_passwords'
   type: counter
   params: 'ip = "{ip}" AND password = "{password}" AND user = "{user}"'
   status: '0,1,2'
   threshold: 2
-  weight: 0.610526369
+  weight: 4.01013027
 - name: 'treat invalid accounts separately'
   type: inbuilt
   function: invalid_account
@@ -30,10 +30,10 @@
   params: 'cookie = 1 AND ip = "{ip}"'
   threshold: 5
   status: '0'
-  weight: -0.750622967
+  weight: 0.01343724
 - name: 'successful previous logins'
   type: counter
   params: 'ip = "{ip}"'
   threshold: 10
   status: '0'
-  weight: -0.239205334
+  weight: -0.16001495
