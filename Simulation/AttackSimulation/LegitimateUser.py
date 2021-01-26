@@ -6,6 +6,7 @@ import threading
 import queue
 import random
 from copy import deepcopy
+from helper import passwordTypo
 
 start_time = time.time()
 
@@ -77,7 +78,10 @@ for row in readCSV:
     metadata['UserAgent'] = userAgent
     payload['metadata'] = metadata
     payload['user'] = row[0]
-    payload['password'] = row[1]
+    if(random.choices([0,1], [0.9,0.1])[0]):
+        payload['password'] = passwordTypo(row[1])
+    else:
+        payload['password'] = row[1]
     payload['metadata']['IP'] = '1.1.1.1'
     payload['metadata']['Attack'] = -1
     payload['metadata']['Cookie'] = random.choices([0,1],[0.5,0.5])[0]
